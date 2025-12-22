@@ -1,24 +1,13 @@
+import NavBar from "./components/NavBar";
+import ItemListContainer from "./components/ItemListContainer";
 
-import './App.css'
-import ItemListContainer from './components/ItemListContainer'
-import Navbar from './components/Navbar'
-
-
-
- function App() {
-
+function App() {
   return (
     <>
-      <Navbar/>
-     
+      <NavBar />
+      <ItemListContainer greeting="¡Bienvenido a mi e-commerce!" />
     </>
-  )
+  );
 }
- 
 
-
-
-
-
-export default App
-
+export default App;

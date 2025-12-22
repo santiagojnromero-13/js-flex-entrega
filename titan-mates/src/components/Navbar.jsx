@@ -1,22 +1,19 @@
-import '../assets/css/navbar.css' 
+import CartWidget from "./CartWidget";
 
+const NavBar = () => {
+  return (
+    <header>
+      <h2>Titan Dis</h2>
 
+      <nav>
+        <a href="#inicio">Inicio</a>
+        <a href="#productos">Productos</a>
+        <a href="#contacto">Contacto</a>
+      </nav>
 
+      <CartWidget />
+    </header>
+  );
+};
 
-
-
-const Navbar =()=>{
-    return(
-        <>
-        <nav className= 'nav-container'>
-          <a className='nav-ancho' href="">Titan Mates</a>
-          <a className='nav-ancho' href="">Mates</a>
-          <a className='nav-ancho' href="">Combos</a>
-          <a className='nav-ancho' href="">Contaco</a>
-        </nav>
-        
-        </>
-    )
-}
-
-export default Navbar
+export default NavBar;
