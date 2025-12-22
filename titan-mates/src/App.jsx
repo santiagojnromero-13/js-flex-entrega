@@ -5,7 +5,7 @@ function App() {
   return (
     <>
       <NavBar />
-      <ItemListContainer greeting="¡Bienvenido a mi e-commerce!" />
+      <ItemListContainer greeting="¡Bienvenido a Titan Mates" />
     </>
   );
 }
