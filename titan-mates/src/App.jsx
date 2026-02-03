@@ -1,13 +1,35 @@
-import NavBar from "./components/NavBar";
-import ItemListContainer from "./components/ItemListContainer";
+import { Routes, Route } from "react-router-dom";
+import NavBar from "./components/NavBar/NavBar";
+import ItemListContainer from "./components/ItemListContainer/ItemListContainer";
+import ItemDetailContainer from "./components/ItemDetailContainer/ItemDetailContainer";
 
-function App() {
+export default function App() {
   return (
     <>
       <NavBar />
-      <ItemListContainer greeting="¡Bienvenido a Titan Mates" />
+
+      <Routes>
+        <Route
+          path="/"
+          element={<ItemListContainer greeting="Catálogo" />}
+        />
+
+        <Route
+          path="/category/:categoryId"
+          element={<ItemListContainer />}
+        />
+
+        <Route
+          path="/item/:itemId"
+          element={<ItemDetailContainer />}
+        />
+
+        <Route
+          path="*"
+          element={<h2 style={{ padding: 12 }}>404 - Ruta no encontrada</h2>}
+        />
+      </Routes>
     </>
   );
 }
 
-export default App;
