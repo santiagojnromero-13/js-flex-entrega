@@ -1,8 +1,15 @@
+import { useContext, useState } from "react";
+import { Link } from "react-router-dom";
 import ItemCount from "../ItemCount/ItemCount";
+import { CartContext } from "../../context/CartContext";
 
 export default function ItemDetail({ item }) {
+  const { addItem } = useContext(CartContext);
+  const [added, setAdded] = useState(false);
+
   const onAdd = (qty) => {
-    console.log("Agregar al carrito:", { ...item, qty });
+    addItem(item, qty);
+    setAdded(true);
   };
 
   return (
@@ -13,8 +20,18 @@ export default function ItemDetail({ item }) {
 
       <hr style={{ margin: "16px 0" }} />
 
-      <h4>Unidades</h4>
-      <ItemCount stock={10} initial={1} onAdd={onAdd} />
+      {!added ? (
+        <>
+          <h4>Unidades</h4>
+          
+          <ItemCount stock={item.stock ?? 10} initial={1} onAdd={onAdd} />
+        </>
+      ) : (
+        <div style={{ display: "flex", gap: 12 }}>
+          <Link to="/cart">Ir al carrito</Link>
+          <Link to="/">Seguir comprando</Link>
+        </div>
+      )}
     </section>
   );
 }

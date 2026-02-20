@@ -1,33 +1,35 @@
 import { useEffect, useState } from "react";
-import { useParams } from "react-router-dom";
-import { products } from "../../data/products";
+import { useParams, Navigate } from "react-router-dom";
+import { doc, getDoc } from "firebase/firestore";
+import { db } from "../../firebase/config.js";
 import ItemDetail from "../ItemDetail/ItemDetail";
 
 export default function ItemDetailContainer() {
   const { itemId } = useParams();
-
   const [item, setItem] = useState(null);
   const [loading, setLoading] = useState(true);
-
-  const getProductById = (id) =>
-    new Promise((resolve, reject) => {
-      setTimeout(() => {
-        const found = products.find((p) => p.id === id);
-        found ? resolve(found) : reject("No existe");
-      }, 500);
-    });
+  const [notFound, setNotFound] = useState(false);
 
   useEffect(() => {
     setLoading(true);
+    setNotFound(false);
 
-    getProductById(itemId)
-      .then(setItem)
-      .catch(() => setItem(null))
+    const ref = doc(db, "products", itemId);
+
+    getDoc(ref)
+      .then((snap) => {
+        if (!snap.exists()) {
+          setNotFound(true);
+          return;
+        }
+        setItem({ id: snap.id, ...snap.data() });
+      })
+      .catch(() => setNotFound(true))
       .finally(() => setLoading(false));
   }, [itemId]);
 
-  if (loading) return <p style={{ padding: 12 }}>Cargando...</p>;
-  if (!item) return <p style={{ padding: 12 }}>Producto no encontrado</p>;
+  if (loading) return <p>Cargando detalle...</p>;
+  if (notFound) return <Navigate to="/404" replace />;
 
   return <ItemDetail item={item} />;
 }
