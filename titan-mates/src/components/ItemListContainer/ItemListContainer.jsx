@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
-import { products } from "../../data/products";
+import { collection, getDocs, query, where } from "firebase/firestore";
+import { db } from "../../firebase/config.js";
 import ItemList from "../ItemList/ItemList";
 
 export default function ItemListContainer({ greeting }) {
@@ -9,18 +10,20 @@ export default function ItemListContainer({ greeting }) {
   const [items, setItems] = useState([]);
   const [loading, setLoading] = useState(true);
 
-  const getProducts = () =>
-    new Promise((resolve) => {
-      setTimeout(() => resolve(products), 500);
-    });
-
   useEffect(() => {
     setLoading(true);
 
-    getProducts()
-      .then((data) => {
-        const filtered = categoryId ? data.filter((p) => p.category === categoryId) : data;
-        setItems(filtered);
+    const colRef = collection(db, "products");
+    const q = categoryId ? query(colRef, where("category", "==", categoryId)) : colRef;
+
+    getDocs(q)
+      .then((snap) => {
+        const data = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+        setItems(data);
+      })
+      .catch((err) => {
+        console.error("Error getDocs:", err);
+        setItems([]);
       })
       .finally(() => setLoading(false));
   }, [categoryId]);
